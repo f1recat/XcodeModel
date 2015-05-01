@@ -1,7 +1,7 @@
 module XcodeModel
   class XcodeModelController < ::ApplicationController
     def index
-      @object_name = params[:table].singularize.camelize
+      @object_name = params[:model].singularize.camelize
       begin
         @database_name = params[:database] || "MyDatabase"
         @properties = []
