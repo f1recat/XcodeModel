@@ -1,0 +1,75 @@
+<pre>
+#import "<%= @object_name %>Object.h" 
+ 
+@interface <%= @object_name %>Object() 
+ 
+<% @internal_properties.each do |property| %>
+@property (nonatomic, <%= property[:retain_type] %>) <%= property[:type] %> <%= property[:name] %>; 
+<% end %>
+ 
+@end 
+ 
+@implementation <%= @object_name %>Object 
+ 
+static BOOL _tableCreated = NO; 
+ 
+<% (@properties << @internal_properties).flatten.each do |property| %>
+@synthesize <%= property[:name] %>; 
+<% end %>
+ 
++ (void)_createTable { 
+    if (!_tableCreated) {
+        _tableCreated = YES;
+        [[<%= @database_name %> getInstance] executeQuery:[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS '%@' ("
+          "id INTEGER PRIMARY KEY,"
+<% @database_fields.each do |field| %>                                                
+          "<%= field[:name] %> <%= field[:type] %>,"                                      
+<% end %>
+          "created_at INTEGER,"
+          "updated_at INTEGER)", NSStringFromClass([self class])]];
+    }
+}
+
++ (NSDictionary*)_mapping {
+    return @{
+      @"id" : @"id_",
+<% @mapping.each do |map| %>  
+      @"<%= map[:from ]%>" : @"<%= map[:to] %>",
+<% end %>
+      @"created_at" : @"_icreatedAt",
+      @"updated_at" : @"_iupdatedAt"
+    };
+}
+<% @internal_properties.each do |property| %>
+  <% if property[:ref_type] == "datetime" %>
+- (void)set<%= property[:name] %>:(int)_an<%= property[:name] %> {
+    <%= property[:name] %> = _an<%= property[:name] %>;
+    self.<%= property[:ref_name] %> = [NSDate dateWithTimeIntervalSince1970:<%= property[:name] %>];
+}
+  
+  <% end %>
+<% end %>
+- (void)save {
+    [[self class] _createTable];
+    [self rm];
+    [[<%= @database_name %> getInstance] executeQuery:
+      [NSString stringWithFormat:@"INSERT INTO '%@' (id, <%= xcode_model_class_save(@database_fields) %>created_at, updated_at) " 
+        "VALUES(%d, <%= xcode_model_class_save_types(@database_fields) %>%d, %d)", 
+        [self class], self.id_, <%= xcode_model_class_save_names(@mapping) %>self._icreatedAt, self._iupdatedAt]
+      parameters:@[<%= xcode_model_class_save_names_strings(@mapping) %>]
+    ];
+}
+
++ (id)_makeElemFromRow:(EGODatabaseRow *)row {
+    <%= @object_name %>Object *ret = [<%= @object_name %>Object new];
+    ret.id_ = [row intForColumn:@"id"];
+<% @mapping.each do |map| %>
+    ret.<%= map[:to] %> = [row <%= map[:type] %>ForColumn:@"<%= map[:from] %>"];
+<% end %>
+    ret._iupdatedAt = [row intForColumn:@"updatedAt"];
+    ret._icreatedAt = [row intForColumn:@"createdAt"];
+    return ret;
+}
+
+@end
+</pre>

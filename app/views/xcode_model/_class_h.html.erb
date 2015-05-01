@@ -1,0 +1,11 @@
+<pre>
+#import "BaseObject.h" 
+ 
+@interface <%= @object_name %>Object : BaseObject 
+ 
+<% @properties.each do |property| %>
+@property (nonatomic, <%= property[:retain_type] %>) <%= property[:type] %><%= property[:name] %>; 
+<% end %>
+ 
+@end 
+</pre>
