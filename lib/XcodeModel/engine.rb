@@ -2,7 +2,7 @@ module XcodeModel
   class Engine < Rails::Engine
 
     initialize "xcode_model.load_app_instance_data" do |app|
-      TeamPage.setup do |config|
+      XcodeModel.setup do |config|
         config.app_root = app.root
       end
     end
