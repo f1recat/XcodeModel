@@ -37,6 +37,7 @@ static BOOL _tableCreated = NO;
       @"<%= map[:from ]%>" : @"<%= map[:to] %>",
 <% end %>
       @"created_at" : @"_icreatedAt",
+      @"deleted_at" : @"_ideletedAt",      
       @"updated_at" : @"_iupdatedAt"
     };
 }
@@ -66,8 +67,8 @@ static BOOL _tableCreated = NO;
 <% @mapping.each do |map| %>
     ret.<%= map[:to] %> = [row <%= map[:type] %>ForColumn:@"<%= map[:from] %>"];
 <% end %>
-    ret._iupdatedAt = [row intForColumn:@"updated_at"];
-    ret._icreatedAt = [row intForColumn:@"created_at"];
+    ret._iupdatedAt = [row intForColumn:@"updatedAt"];
+    ret._icreatedAt = [row intForColumn:@"createdAt"];
     return ret;
 }
 

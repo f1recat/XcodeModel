@@ -9,7 +9,7 @@ module XcodeModel
         @database_fields = []
         @mapping = []      
         @object_name.constantize.columns.each do |column|
-          next if %w[created_at deleted_at updated_at].include? column.name
+          next if %w[created_at deleted_at updated_at].include?(column.name.to_s) || column.name.to_s == "id"
           case column.type.to_s
           when "string", "text"
             @properties << {type:"NSString *", retain_type: "strong", name: column.name.camelize(:lower)}
