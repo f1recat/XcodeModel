@@ -6,7 +6,7 @@ module XcodeModelHelper
   end
   
   def xcode_model_class_save_types_mapping(type)
-    return "%d" if type == "INTEGER"
+    return "%ld" if type == "INTEGER"
     return "%f" if type == "REAL"
     return "?" if type == "TEXT"
   end
@@ -19,7 +19,15 @@ module XcodeModelHelper
   
   def xcode_model_class_save_names(mapping)
     ret = ""
-    mapping.each {|map| ret += "self.#{map[:to]}, " if map[:type].nil? || map[:type] != "string"}    
+    mapping.each do |map| 
+      if map[:type].nil? || map[:type] != "string"
+        if map[:type] == "NSInteger"
+          ret += "(long)self.#{map[:to]}, "          
+        else
+          ret += "self.#{map[:to]}, "
+        end
+      end
+    end
     ret
   end
   
