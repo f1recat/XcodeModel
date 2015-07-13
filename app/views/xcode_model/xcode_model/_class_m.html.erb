@@ -42,7 +42,7 @@ static BOOL _tableCreated = NO;
 }
 <% @internal_properties.each do |property| %>
   <% if property[:ref_type] == "datetime" %>
-- (void)set<%= property[:name] %>:(int)_an<%= property[:name] %> {
+- (void)set<%= property[:name] %>:(NSUInteger)_an<%= property[:name] %> {
     <%= property[:name] %> = _an<%= property[:name] %>;
     self.<%= property[:ref_name] %> = [NSDate dateWithTimeIntervalSince1970:<%= property[:name] %>];
 }
@@ -54,20 +54,20 @@ static BOOL _tableCreated = NO;
     [self rm];
     [[<%= @database_name %> getInstance] executeQuery:
       [NSString stringWithFormat:@"INSERT INTO '%@' (id, <%= xcode_model_class_save(@database_fields) %>created_at, updated_at) " 
-        "VALUES(%d, <%= xcode_model_class_save_types(@database_fields) %>%d, %d)", 
-        [self class], self.id_, <%= xcode_model_class_save_names(@mapping) %>self._icreatedAt, self._iupdatedAt]
+        "VALUES(%lu, <%= xcode_model_class_save_types(@database_fields) %>%lu, %lu)", 
+        [self class], (unsigned long)self.id_, <%= xcode_model_class_save_names(@mapping) %>(unsigned long)self._icreatedAt, (unsigned long)self._iupdatedAt]
       parameters:@[<%= xcode_model_class_save_names_strings(@mapping) %>]
     ];
 }
 
 + (id)_makeElemFromRow:(EGODatabaseRow *)row {
     <%= @object_name %>Object *ret = [<%= @object_name %>Object new];
-    ret.id_ = [row intForColumn:@"id"];
+    ret.id_ = [row longForColumn:@"id"];
 <% @mapping.each do |map| %>
     ret.<%= map[:to] %> = [row <%= map[:type] %>ForColumn:@"<%= map[:from] %>"];
 <% end %>
-    ret._iupdatedAt = [row intForColumn:@"updated_at"];
-    ret._icreatedAt = [row intForColumn:@"created_at"];
+    ret._iupdatedAt = [row longForColumn:@"updated_at"];
+    ret._icreatedAt = [row longForColumn:@"created_at"];
     return ret;
 }
 

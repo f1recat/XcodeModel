@@ -20,14 +20,14 @@ module XcodeModel
             @database_fields << {type: "REAL", name: column.name}       
             @mapping << {to: column.name.camelize(:lower), from: column.name, type:"double"}
           when "integer"
-            @properties << {type:"int ", retain_type: "assign", name: column.name.camelize(:lower)}                        
+            @properties << {type:"NSInteger ", retain_type: "assign", name: column.name.camelize(:lower)}                        
             @database_fields << {type: "INTEGER", name: column.name}     
-            @mapping << {to: column.name.camelize(:lower), from: column.name, type:"int"}
+            @mapping << {to: column.name.camelize(:lower), from: column.name, type:"NSInteger"}
           when "time", "datetime"
             @properties << {type:"NSDate *", retain_type: "strong", name: column.name.camelize(:lower)}
-            @internal_properties << {type: "int ", retain_type: "assign", name: "_i#{column.name.camelize}", ref_type:"datetime", ref_name:column.name.camelize(:lower)}
+            @internal_properties << {type: "NSUInteger ", retain_type: "assign", name: "_i#{column.name.camelize}", ref_type:"datetime", ref_name:column.name.camelize(:lower)}
             @database_fields << {type: "INTEGER", name: column.name}   
-            @mapping << {to: "_i#{column.name.camelize}", from: column.name, type: "int"}
+            @mapping << {to: "_i#{column.name.camelize}", from: column.name, type: "NSUInteger"}
           when "hstore"
             st = Station.new
             st.methods.each do |method|
