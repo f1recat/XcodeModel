@@ -1,0 +1,4 @@
+<% XcodeModel.syncable_models.each do |table| %>
+  <%= link_to xcode_model_url(table.to_s + ".h"), xcode_model_url(table.to_s + ".h") %><br/>
+  <%= link_to xcode_model_url(table.to_s + ".m"), xcode_model_url(table.to_s + ".m") %><br/><br/>  
+<% end %>

@@ -6,7 +6,7 @@ ActionController::Renderers.add :xcode do |obj, options|
       object.class.columns.each do |column|
         if ["date", "time", "datetime"].include? column.type.to_s
           if (datetime = object.send(column.name))
-            ret[column.name] = datetime.to_time.to_i                      
+            ret[column.name] = (datetime.to_time.to_f * 1000).to_i
           else
             ret[column.name] = nil
           end

@@ -1,2 +1,2 @@
-<%= render 'class_h' %>
-<%= render 'class_m' %>
+<%= render 'class_h' if request[:format].to_s == "h"%>
+<%= render 'class_m'  if request[:format].to_s == "m" %>
