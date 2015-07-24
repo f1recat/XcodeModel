@@ -1,7 +1,7 @@
-module XcodeModel
+module Modata
   class Engine < Rails::Engine
     
-    initializer "xcode_model.load_static_assets" do |app|
+    initializer "modata.load_static_assets" do |app|
       app.middleware.use ::ActionDispatch::Static, "#{root}/public"
     end
 

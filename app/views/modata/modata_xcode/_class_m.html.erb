@@ -37,7 +37,6 @@ static BOOL _tableCreated = NO;
       @"<%= map[:from ]%>" : @"<%= map[:to] %>",
 <% end %>
       @"created_at" : @"_icreatedAt",
-      @"deleted_at" : @"_ideletedAt",      
       @"updated_at" : @"_iupdatedAt"
     };
 }
@@ -54,10 +53,10 @@ static BOOL _tableCreated = NO;
     [[self class] _createTable];
     [self rm];
     [[<%= @database_name %> getInstance] executeQuery:
-      [NSString stringWithFormat:@"INSERT INTO '%@' (id, <%= xcode_model_class_save(@database_fields) %>created_at, updated_at) " 
-        "VALUES(%lu, <%= xcode_model_class_save_types(@database_fields) %>%lu, %lu)", 
-        [self class], self.id_, <%= xcode_model_class_save_names(@mapping) %>self._icreatedAt, self._iupdatedAt]
-      parameters:@[<%= xcode_model_class_save_names_strings(@mapping) %>]
+      [NSString stringWithFormat:@"INSERT INTO '%@' (id, <%= modata_xcode_class_save(@database_fields) %>created_at, updated_at) " 
+        "VALUES(%lu, <%= modata_xcode_class_save_types(@database_fields) %>%lu, %lu)", 
+        [self class], (unsigned long)self.id_, <%= modata_xcode_class_save_names(@mapping) %>(unsigned long)self._icreatedAt, (unsigned long)self._iupdatedAt]
+      parameters:@[<%= modata_xcode_class_save_names_strings(@mapping) %>]
     ];
 }
 
@@ -67,8 +66,8 @@ static BOOL _tableCreated = NO;
 <% @mapping.each do |map| %>
     ret.<%= map[:to] %> = [row <%= map[:type] %>ForColumn:@"<%= map[:from] %>"];
 <% end %>
-    ret._iupdatedAt = [row longForColumn:@"updatedAt"];
-    ret._icreatedAt = [row longForColumn:@"createdAt"];
+    ret._iupdatedAt = [row longForColumn:@"updated_at"];
+    ret._icreatedAt = [row longForColumn:@"created_at"];
     return ret;
 }
 

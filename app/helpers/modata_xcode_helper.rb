@@ -1,23 +1,23 @@
-module XcodeModelHelper
-  def xcode_model_class_save(properties)
+module ModataXcodeHelper
+  def modata_xcode_class_save(properties)
     ret = ""
     properties.each {|property| ret += "#{property[:name]}, "}
     ret
   end
   
-  def xcode_model_class_save_types_mapping(type)
+  def modata_xcode_class_save_types_mapping(type)
     return "%ld" if type == "INTEGER"
     return "%f" if type == "REAL"
     return "?" if type == "TEXT"
   end
   
-  def xcode_model_class_save_types(properties)
+  def modata_xcode_class_save_types(properties)
     ret = ""
-    properties.each {|property| ret += "#{xcode_model_class_save_types_mapping property[:type].to_s}, "}
+    properties.each {|property| ret += "#{modata_xcode_class_save_types_mapping property[:type].to_s}, "}
     ret    
   end
   
-  def xcode_model_class_save_names(mapping)
+  def modata_xcode_class_save_names(mapping)
     ret = ""
     mapping.each do |map| 
       if map[:type].nil? || map[:type] != "string"
@@ -31,7 +31,7 @@ module XcodeModelHelper
     ret
   end
   
-  def xcode_model_class_save_names_strings(mapping)
+  def modata_xcode_class_save_names_strings(mapping)
     ret = ""
     mapping.each {|map| ret += "self.#{map[:to]}, " if map[:type] && map[:type] == "string"}    
     ret = ret[0..-3] if ret.length > 0

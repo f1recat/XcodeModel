@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'xcode_model/version'
+require 'modata/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "xcode_model"
-  spec.version       = XcodeModel::VERSION
+  spec.name          = "modata"
+  spec.version       = Modata::VERSION
   spec.authors       = ["Yuri Dymov"]
   spec.email         = ["yuri@dymov.me"]
 
@@ -13,9 +13,9 @@ Gem::Specification.new do |spec|
     spec.metadata['allowed_push_host'] = "http://mygemserver.com"
   end
 
-  spec.summary       = "Provides source code generation for XCode from models"
+  spec.summary       = "Provides objective-c source code generation from models and generates web services for exposing data"
   spec.description   = ""
-  spec.homepage      = "https://github.com/f1recat/XcodeModel"
+  spec.homepage      = "https://github.com/f1recat/modata"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }

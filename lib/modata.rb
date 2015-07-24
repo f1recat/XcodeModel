@@ -1,14 +1,14 @@
-require "xcode_model/version"
-require 'xcode_model/engine'
+require "modata/version"
+require 'modata/engine'
 require 'rubygems'
 
-module XcodeModel  
+module Modata  
   def self.syncable_models
     ret = []
     ActiveRecord::Base.connection.tables.each do |table| 
       begin
         cls = table.singularize.camelize.constantize
-        ret << cls if cls.included_modules.include?(XcodeModel::Model::InstanceMethods)
+        ret << cls if cls.included_modules.include?(Modta::Model::InstanceMethods)
       rescue
       end
     end
@@ -17,7 +17,7 @@ module XcodeModel
   
   module Model 
     def has_sync?
-      XcodeModel.enabled_for_model?(self)
+      Modata.enabled_for_model?(self)
     end
     
     def has_sync(options={})
@@ -36,4 +36,4 @@ module XcodeModel
   end
 end
 
-ActiveRecord::Base.send :extend, XcodeModel::Model
+ActiveRecord::Base.send :extend, Modata::Model

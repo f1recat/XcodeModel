@@ -1,1 +1,1 @@
-Mime::Type.register "text/xcode", :xcode
+Mime::Type.register "text/modata", :modata

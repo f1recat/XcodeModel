@@ -1,4 +1,4 @@
-ActionController::Renderers.add :xcode do |obj, options|
+ActionController::Renderers.add :modata do |obj, options|
   if obj.count > 0
     data = []
     obj.each do |object|

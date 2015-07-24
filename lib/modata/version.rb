@@ -1,3 +1,3 @@
-module XcodeModel
+module Modata
   VERSION = "0.1.2"
 end

@@ -1,7 +1,7 @@
 require 'rails/generators'
 require 'rails/generators/active_record'
 
-module XcodeModel
+module Modata
   class InstallGenerator < ::Rails::Generators::Base
     include ::Rails::Generators::Migration
     
@@ -9,8 +9,8 @@ module XcodeModel
     desc 'Generates delete table migration'
     
     def create_migration_file
-      add_xcode_model_migration 'create_has_sync_deletes'
-      add_xcode_model_migration 'create_has_sync_devices'
+      add_modata_migration 'create_modata_deletes'
+      add_modata_migration 'create_hmodata_devices'
     end
     
     def self.next_migration_number(dirname)
@@ -19,7 +19,7 @@ module XcodeModel
     
     protected
     
-    def add_xcode_model_migration(template)
+    def add_modata_migration(template)
       migration_dir = File.expand_path 'db/migrate'
       migration_template "#{template}.rb", "db/migrate/#{template}.rb" unless self.class.migration_exists?(migration_dir, template)
     end
