@@ -29,7 +29,7 @@ module XcodeModel
         
     module InstanceMethods
       def _track_deletion
-        HasSyncDelete.create(table_name:self.class.name, row_id:self.id)
+        HasSyncDelete.create(table_name:self.class.name, row_id:self.id) if HasSyncDevice.count > 0
         true
       end            
     end    
