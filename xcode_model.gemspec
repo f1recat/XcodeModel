@@ -1,10 +1,10 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'XcodeModel/version'
+require 'xcode_model/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "XcodeModel"
+  spec.name          = "xcode_model"
   spec.version       = XcodeModel::VERSION
   spec.authors       = ["Yuri Dymov"]
   spec.email         = ["yuri@dymov.me"]

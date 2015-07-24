@@ -1,5 +1,5 @@
-require "XcodeModel/version"
-require 'XcodeModel/engine'
+require "xcode_model/version"
+require 'xcode_model/engine'
 require 'rubygems'
 
 module XcodeModel  
@@ -15,16 +15,23 @@ module XcodeModel
     ret
   end
   
-  module Model
+  module Model 
     def has_sync?
       XcodeModel.enabled_for_model?(self)
     end
     
     def has_sync(options={})
       send :include, InstanceMethods
-    end        
-    
+      self.class_eval do
+        before_destroy :_track_deletion        
+      end      
+    end  
+        
     module InstanceMethods
+      def _track_deletion
+        HasSyncDelete.create(table_name:self.class.name, row_id:self.id)
+        true
+      end            
     end    
   end
 end
