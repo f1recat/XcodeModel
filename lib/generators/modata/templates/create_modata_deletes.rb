@@ -1,12 +1,12 @@
-class CreateHasSyncDeletes < ActiveRecord::Migration
+class CreateModataDeletes < ActiveRecord::Migration
   def self.up
-    create_table :has_sync_deletes do |t|
+    create_table :modata_deletes do |t|
       t.string  :table_name
       t.integer :row_id
     end
   end
 
   def self.down
-    drop_table :has_sync_deletes
+    drop_table :modata_deletes
   end
 end

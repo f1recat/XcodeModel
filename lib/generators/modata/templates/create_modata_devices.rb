@@ -1,6 +1,6 @@
-class CreateHasSyncDevices < ActiveRecord::Migration
+class CreateModataDevices < ActiveRecord::Migration
   def self.up
-    create_table :has_sync_devices do |t|
+    create_table :modata_devices do |t|
       t.string  :device
       t.integer :state
       t.datetime :last_sync_timestamp
@@ -8,6 +8,6 @@ class CreateHasSyncDevices < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :has_sync_devices
+    drop_table :modata_devices
   end
 end

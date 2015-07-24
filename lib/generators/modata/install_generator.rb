@@ -10,7 +10,7 @@ module Modata
     
     def create_migration_file
       add_modata_migration 'create_modata_deletes'
-      add_modata_migration 'create_hmodata_devices'
+      add_modata_migration 'create_modata_devices'
     end
     
     def self.next_migration_number(dirname)

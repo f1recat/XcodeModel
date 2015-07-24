@@ -4,10 +4,15 @@ module Modata
       timestamp = params[:timestamp]
       table = params[:object]
       if table
-        if timestamp
-          render modata: table.singularize.camelize.constantize.where("updated_at > ?", DateTime.strptime((timestamp.to_i + 1).to_s,'%Q'))
+        klass = table.singularize.camelize.constantize
+        if klass.has_modata?
+          if timestamp
+            render modata: klass.where("updated_at > ?", DateTime.strptime((timestamp.to_i + 1).to_s,'%Q'))
+          else
+            render modata: klass.all
+          end
         else
-          render modata: table.singularize.camelize.constantize.all
+          render text:"forbidden"
         end
       else
       end
@@ -16,12 +21,12 @@ module Modata
     def deleted
       last_id = params[:last_id]
       last_id ||= 0      
-      delete = HasSyncDelete.order('id').last
+      delete = ModataDelete.order('id').last
       delete = delete.nil? ? 0 : delete.id      
       if last_id == "init"
         render json:{sync_state: delete}
       else
-        ret = HasSyncDelete.where("id > ?", last_id).group_by {|obj| obj.table_name}
+        ret = ModataDelete.where("id > ?", last_id).group_by {|obj| obj.table_name}
         ret_arr = []
         ret.each {|k, v| ret[k] = v.map{|o| o.row_id}}.each {|k, v| ret_arr << {table: k, ids: v.join(",")}}
         ret_arr << {table: "sync_state", ids:delete}
@@ -34,11 +39,11 @@ module Modata
       platform = params[:platform]
       sync_state = params[:sync_state]
       if device_id && platform && sync_state
-        device = HasSyncDevice.find_or_initialize_by(device: "#{platform}_#{device_id}")
+        device = ModataDevice.find_or_initialize_by(device: "#{platform}_#{device_id}")
         device.state = sync_state.to_i
         device.last_sync_timestamp = DateTime.now
         device.save
-        HasSyncDelete.destroy_all("id < #{HasSyncDevice.order(:state).first.state}")
+        ModataDelete.destroy_all("id < #{ModataDevice.order(:state).first.state}")
         render json:{success:1}        
       else
         render json:{success:0}

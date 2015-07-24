@@ -8,7 +8,7 @@ module Modata
     ActiveRecord::Base.connection.tables.each do |table| 
       begin
         cls = table.singularize.camelize.constantize
-        ret << cls if cls.included_modules.include?(Modta::Model::InstanceMethods)
+        ret << cls if cls.included_modules.include?(Modata::Model::InstanceMethods)
       rescue
       end
     end
@@ -16,11 +16,11 @@ module Modata
   end
   
   module Model 
-    def has_sync?
-      Modata.enabled_for_model?(self)
+    def has_modata?
+      Modata.syncable_models.include?self
     end
     
-    def has_sync(options={})
+    def has_modata(options={})
       send :include, InstanceMethods
       self.class_eval do
         before_destroy :_track_deletion        
@@ -29,7 +29,7 @@ module Modata
         
     module InstanceMethods
       def _track_deletion
-        HasSyncDelete.create(table_name:self.class.name, row_id:self.id) if HasSyncDevice.count > 0
+        ModataDelete.create(table_name:self.class.name, row_id:self.id) if ModataDevice.count > 0
         true
       end            
     end    
