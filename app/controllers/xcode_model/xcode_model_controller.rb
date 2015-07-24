@@ -73,7 +73,7 @@ module XcodeModel
       delete = HasSyncDelete.order('id').last
       delete = delete.nil? ? 0 : delete.id      
       if last_id == "init"
-        render json:{"sync_state": delete}
+        render json:{sync_state: delete}
       else
         ret = HasSyncDelete.where("id > ?", last_id).group_by {|obj| obj.table_name}
         ret_arr = []
