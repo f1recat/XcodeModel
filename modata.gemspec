@@ -6,8 +6,8 @@ require 'modata/version'
 Gem::Specification.new do |spec|
   spec.name          = "modata"
   spec.version       = Modata::VERSION
-  spec.authors       = ["Yuri Dymov"]
-  spec.email         = ["yuri@dymov.me"]
+  spec.authors       = ["Yury Dymov"]
+  spec.email         = ["yury@dymov.me"]
 
   if spec.respond_to?(:metadata)
     spec.metadata['allowed_push_host'] = "http://mygemserver.com"
@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "Provides objective-c source code generation from models and generates web services for exposing data"
   spec.description   = ""
-  spec.homepage      = "https://github.com/yuri-dymov/modata"
+  spec.homepage      = "https://github.com/yury-dymov/modata"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
