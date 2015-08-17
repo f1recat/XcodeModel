@@ -1,0 +1,40 @@
+<pre>
+  package <%= @package_name %>;
+  
+  import com.orm.SugarRecord;  
+  import org.json.JSONArray;
+  import org.json.JSONException;
+  import org.json.JSONObject;
+  
+  public class <%= @object_name %> extends SugarRecord<%= "<#{@object_name}>" %> {
+    <% @properties.each do |property| %>
+    <%= property[:type] %> <%= modata_android_prop_name(property[:name]) %>;
+    <% end %>
+    
+    <% @properties.each do |property| %>
+    public void set<%= modata_android_prop_name(property[:name], capitalize:true) %> (<%= property[:type] %> <%= modata_android_prop_name(property[:name]) %>) {
+      this.<%= modata_android_prop_name property[:name] %> = <%= modata_android_prop_name property[:name] %>;
+    }
+    
+    public <%= property[:type] %> <%= modata_android_prop_name property[:name] %>() {
+      return this.<%= modata_android_prop_name property[:name] %>;
+    }
+        
+    <% end %>    
+    public static void synchronizeDataFromJSONArray(JSONArray objects) {
+      <%= @object_name %>.deleteAll(<%= @object_name %>.class);
+      for (int i = 0; i < objects.length(); ++i) {
+        try {
+          JSONObject object = objects.getJSONObject(i);
+          <%= @object_name %> elem = new <%= @object_name %>();
+          <% @properties.each do |property| %>          
+          elem.set<%= modata_android_prop_name(property[:name], capitalize:true) %>(object.get<%= property[:type].capitalize %>("<%= modata_android_rm_underscore(property[:name]) %>"));
+          <% end %>
+          elem.save();          
+        } catch (JSONException e) {
+        };
+      }      
+    }
+    
+  }
+</pre>

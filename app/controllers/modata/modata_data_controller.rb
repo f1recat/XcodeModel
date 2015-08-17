@@ -4,7 +4,12 @@ module Modata
       timestamp = params[:timestamp]
       table = params[:object]
       if table
-        klass = table.singularize.camelize.constantize
+        klass = nil
+        begin
+          klass = table.singularize.camelize.constantize
+        rescue
+          klass = table.camelize.constantize          
+        end
         if klass.has_modata?
           if timestamp
             render modata: klass.where("updated_at > ?", DateTime.strptime((timestamp.to_i + 1).to_s,'%Q'))
@@ -17,12 +22,12 @@ module Modata
       else
       end
     end
-    
+
     def deleted
       last_id = params[:last_id]
-      last_id ||= 0      
+      last_id ||= 0
       delete = ModataDelete.order('id').last
-      delete = delete.nil? ? 0 : delete.id      
+      delete = delete.nil? ? 0 : delete.id
       if last_id == "init"
         render json:{sync_state: delete}
       else
@@ -30,10 +35,10 @@ module Modata
         ret_arr = []
         ret.each {|k, v| ret[k] = v.map{|o| o.row_id}}.each {|k, v| ret_arr << {table: k, ids: v.join(",")}}
         ret_arr << {table: "sync_state", ids:delete}
-        render json: ret_arr  
+        render json: ret_arr
       end
     end
-    
+
     def commit
       device_id = params[:device_id]
       platform = params[:platform]
@@ -44,7 +49,7 @@ module Modata
         device.last_sync_timestamp = DateTime.now
         device.save
         ModataDelete.destroy_all("id < #{ModataDevice.order(:state).first.state}")
-        render json:{success:1}        
+        render json:{success:1}
       else
         render json:{success:0}
       end

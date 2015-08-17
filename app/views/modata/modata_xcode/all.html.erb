@@ -1,4 +1,4 @@
 <% Modata.syncable_models.each do |table| %>
-  <%= link_to modata_model_url(table.to_s + ".h"), modata_model_url(table.to_s + ".h") %><br/>
-  <%= link_to modata_model_url(table.to_s + ".m"), modata_model_url(table.to_s + ".m") %><br/><br/>  
+  <%= link_to modata_xcode_model_url(table.to_s + ".h"), modata_xcode_model_url(table.to_s + ".h") %><br/>
+  <%= link_to modata_xcode_model_url(table.to_s + ".m"), modata_xcode_model_url(table.to_s + ".m") %><br/><br/>  
 <% end %>
