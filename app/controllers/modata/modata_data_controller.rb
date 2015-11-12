@@ -11,11 +11,17 @@ module Modata
           klass = table.camelize.constantize          
         end
         if klass.has_modata?
+          data = []
           if timestamp
-            render modata: klass.where("updated_at > ?", DateTime.strptime((timestamp.to_i + 1).to_s,'%Q'))
+            data = klass.where("updated_at > ?", DateTime.strptime((timestamp.to_i + 1).to_s,'%Q'))
           else
-            render modata: klass.all
+            data = klass.all
           end
+          if klass.modata_filter_method
+            render modata: klass.send(klass.modata_filter_method, data)
+         else
+            render modata: data    
+         end
         else
           render text:"forbidden"
         end

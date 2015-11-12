@@ -26,10 +26,13 @@ module Modata
     end
 
     def has_modata(options={})
-      send :include, InstanceMethods
+      send :include, InstanceMethods      
       self.class_eval do
-        before_destroy :_track_deletion
+        before_destroy :_track_deletion   
       end
+      
+      class_attribute :modata_filter_method
+      self.modata_filter_method = options[:filter]
     end
 
     module InstanceMethods
@@ -37,6 +40,8 @@ module Modata
         ModataDelete.create(table_name:self.class.name, row_id:self.id) if ModataDevice.count > 0
         true
       end
+      
+      
     end
   end
 end
