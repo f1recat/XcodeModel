@@ -19,9 +19,9 @@ module Modata
           end
           if klass.modata_filter_method
             render modata: klass.send(klass.modata_filter_method, data)
-         else
+           else
             render modata: data    
-         end
+          end
         else
           render text:"forbidden"
         end
