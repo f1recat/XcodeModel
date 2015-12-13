@@ -1,5 +1,5 @@
 def process_value(value)
-  return (value.to_time.to_f * 1000).to_i if value && ["Date", "DateTime", "Time", "ActiveSupport::TimeWithZone"].include?(value.class) 
+  return (value.to_time.to_f * 1000).to_i if value && ["Date", "DateTime", "Time", "ActiveSupport::TimeWithZone"].include?(value.class.to_s) 
   value
 end
 
